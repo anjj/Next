@@ -19,7 +19,7 @@ html,body {
 	width: 100%;
 	height: 100%;
 	z-index: 9999;
-	background: url('css/img/ajax-loader.gif') 50% 50% no-repeat rgb(249,249,249);
+	background: url('img/ajax-loader.gif') 50% 50% no-repeat rgb(249,249,249);
 }
 
 
@@ -160,50 +160,49 @@ html,body {
 }
 .ui-page-theme-a a{
     color: #0F0F0F;
-    
+    text-decoration: none;
+}
+.ui-page-theme-a a:active{
+   color: #0F0F0F;
 }
 .ui-page-theme-a a:hover{
     color: #F2F2F2;
     text-shadow: 0 1px 0 #000;
     text-decoration: underline;
 }
-
 .ui-popup {
     padding: 8px !important;
     border-radius: 4px !important;
 }
-
-#popupParis-popup{
-    width: 90%;
-    padding: 0.5%;
-}
-
-#ButtonPL, #ButtonPL{
-    float: left;
-    width: 45%;
-}
-
 .ui-grid-a>.ui-block-a, .ui-grid-a>.ui-block-b{
     padding: 2px !important;
 }
-
 .ui-dialog-background {
 	opacity: 0.5;
 	display: block !important;
 	-webkit-transition: opacity 0.5s ease-in;
 }
- 
 .ui-dialog-background.pop.in {
 	opacity: 1;
 	-webkit-transition: opacity 0.5s ease-in;
 }
- 
 .ui-dialog {
 	min-height: 100% !important;
 	background: transparent !important;
 }
 
 
+/*POPUP STYLE*/
+#popupParis-popup{
+    width: 90%;
+    padding: 0.5%;
+}
+#ButtonPL, #ButtonPL{
+    float: left;
+    width: 45%;
+}
+ 
+/* -------------------------------------------------------------------------*/
 
 /*RESPONSIVE*/
 @media(max-width: 550px){

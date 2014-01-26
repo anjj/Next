@@ -20,6 +20,8 @@
     </head>
     <body>
 
+        
+
         <!-- HOME -->
         <div data-role="page" id="home">
                 <!--HEADER-->
@@ -80,17 +82,19 @@
                
                         <input type="text" id="CapNameEditor" placeholder="Nombre del Capitulo">
                         <fieldset class="ui-grid-a">
-                          <div id="buttonLeft" class="ui-block-a"><button type="submit" data-theme="a">Cancel</button></div>
-                          <div id="buttonRight" class="ui-block-b"><button type="submit" data-theme="a">Submit</button></div>
+                          <div onclick="viewedEpisode();" id="buttonLeft" class="ui-block-a"><button id="viewButton" type="submit" data-theme="a">VISTO</button></div>
+                          <div onclick="editEpisode();" id="buttonRight" class="ui-block-b"><button type="submit" data-theme="a">EDITAR</button></div>
                         </fieldset>
                 
                 </div>
 
         </div>
 
-
-       
         </div>
+        
+
+        <div id="loader" class="loader"></div>
+
         <!--Javascript-->
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <script src="js/bulbasaur.js"></script>

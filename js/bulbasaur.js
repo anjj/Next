@@ -1,4 +1,9 @@
 var idSerie = 0;
+var Tepisode;
+var indexE = 0;
+var loader;
+var EpisodeStatus;
+
 MapSeries = [];
 Episodes = [];
 
@@ -75,8 +80,8 @@ function loadSerie(){
                  );
 
                 loadEpisodes();
-
-                setProgress(((100 * itemS.capA) / itemS.capitulos).toFixed(2));
+                
+                
             }
 
         });
@@ -84,7 +89,6 @@ function loadSerie(){
         window.location = 'index.php#home';
     }
  }
-
 
 /*LOAD EPISODES REVERSE MODE*/
 function loadEpisodes(){
@@ -111,43 +115,148 @@ function loadEpisodes(){
             } else if( Epi.viewed == 'ac'){
                 $('#listCaps').append('<a onclick="EpisodePOP(' + Epi.id + ');" href="#popupParis" data-rel="popup" data-position-to="window" data-transition="fade"><li class="capituloA">' + length-- + " - " + Epi.name + '</li></a>');
             } else {
-                $('#listCaps').append('<a onclick="EpisodePOP(' + Epi.id + ');" href="#popupParis" data-rel="popup" data-position-to="window" data-transition="fade"><li class="capitulo">' + length-- + " - " + Epi.name + '</li></a>');
+                $('#listCaps').append('<a onclick="EpisodePOP(' + Epi.id + ');" href="#popupParis" data-rel="popup" data-position-to="window" data-transition="fade"><li class="capituloA">' + length-- + " - " + Epi.name + '</li></a>');
             }
 
-            
+            setProgress();
         });
     }
 }
+
+/*Change Status EPISODES*/
+function viewedEpisode(){
+
+    if(Tepisode.viewed == 'no' || Tepisode.viewed == 'ac'){
+        EpisodeStatus = 'si';
+    } else {
+        EpisodeStatus = 'no';
+    }
+
+    newName = $( "#CapNameEditor").val()
+
+    parametres = { id: Tepisode.id, viewed: EpisodeStatus};
+    dataEpi = jQuery.param(parametres);
+
+
+    $.ajax({
+		type: 'POST',
+		url: 'ws/UpE.php',
+		data: dataEpi,
+		success: Correct,
+		error: ErrorMessage
+	});
+
+    function Correct(){
+       getPositionEpisodeById(Tepisode.id);
+       countL = $("#listCaps li").size()
+       /*CHANGE el CSS Button*/
+       if(Tepisode.viewed == 'no'){
+           $('#viewButton').text('VISTO');
+           $("#viewButton").css("background", "#90EE90");
+           $("#listCaps li").get(indexE).setAttribute("style", "background: #90EE90;");
+           Tepisode.viewed = 'si';
+       } else {
+           Tepisode.viewed = 'no';
+           $('#viewButton').text('SIN VER');
+           $("#listCaps li").get(indexE).setAttribute("style", "background: #F17979;");
+           $("#viewButton").css("background", "#F17979");
+       }
+              
+    }
+
+    function ErrorMessage(Error){
+	    alert('ERROR:  al editar el capitulo - ( º - º ) ');
+    }
+
+    setProgress();
+}
+
+/*Editar el nombre del capitulo*/
+function editEpisode(){
+    
+    newName = $("#CapNameEditor").val();
+
+    parametres = { id: Tepisode.id, name: newName };
+    dataEpi = jQuery.param(parametres);
+
+
+    $.ajax({
+		type: 'POST',
+		url: 'ws/UpEname.php',
+		data: dataEpi,
+		success: Correct,
+		error: ErrorMessage
+	});
+
+	function Correct() {
+	    $("#listCaps li").get(indexE).innerText = Tepisode.numCap + ' - ' + newName;
+    }
+
+	function ErrorMessage() { alert('ERROR:  al editar el capitulo - ( º - º ) '); }
+}
+
+
 /*LIVE JQUERY*/
 $("#home").on("pagecreate", function () {
     getS();
 });
 
+$("#home").on("pageshow", function () {
+    loader = document.getElementById("loader");
+    loader.setAttribute("style","display: none;");
+});
+
 $("#detailSerie").on("pagecreate", function () {
-    /*Show Loader GIF*/
+    loader = document.getElementById("loader");
+    loader.setAttribute("style","display: block;");
 });
 
 $("#detailSerie").on("pageshow", function () {
-    loadSerie();
+     loader.setAttribute("style","display: none;");
+     loadSerie();
 });
 
+
 /*UTILIDADES*/
-function setProgress(progress){           
-    var progressBarWidth =progress*$(".container").width()/ 100;  
-    $(".progressBar").width(progressBarWidth).html(progress + "% Completa&nbsp;&nbsp;");
+function setProgress(){
+    var count = 0;
+
+    $.each(Episodes, function (index, episode) {
+        if (episode.viewed == 'si') {
+            count++;
+        }
+    });
+
+    serieStatus = (( count / Episodes.length ) * 100).toFixed(2);
+
+    var progressBarWidth =serieStatus*$(".container").width()/ 100;  
+    $(".progressBar").width(progressBarWidth).html(serieStatus + "%&nbsp;");
 }
 function detail(value){
     idSerie = value;
     window.location = '#detailSerie';
 }
 function EpisodePOP(idS){
-    
-    $.each(Episodes, function(index, episode) {
+
+    $.each(Episodes, function (index, episode) {
         if (episode.id == idS) {
+            Tepisode = episode;
+            if (episode.viewed == 'no') {
+                $('#viewButton').text('SIN VER');
+                $("#viewButton").css("background", "#F17979");
+            } else {
+                $("#viewButton").val('VISTO');
+                $("#viewButton").css("background", "#90EE90");
+            }
             $("#CapNameEditor").val(episode.name);
             return;
         }
     });
-
-    
+}
+function getPositionEpisodeById(idEpisode){
+    $.each(Episodes, function (index, episode) {
+        if (episode.id == idEpisode) {
+            indexE = index;
+        }
+    });
 }

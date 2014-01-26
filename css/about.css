@@ -1,0 +1,40 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    width: 100%;
+}
+
+.about1, .about2, .about3, .about4{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    text-align: center;
+}
+
+.about2{
+    background: blue;
+    top: 100%;
+}
+
+.about3{
+    background: green;
+    top: 200%;
+}
+
+.about4{
+    background: yellow;
+    top: 300%;
+}
+
+.title{
+    font-family: sans-serif;
+    font-size: 8em;
+    font-weight: bold;
+    font-style: normal;
+    margin-top: 0.4em;
+    color:  #364F97;
+    text-shadow: 5px 3px 0 #E3E4EE;
+}
